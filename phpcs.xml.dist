@@ -12,7 +12,7 @@
 	<exclude-pattern>.git/*</exclude-pattern>
 	<exclude-pattern>tests/*</exclude-pattern>
 	<exclude-pattern>wp-cache-config-sample.php</exclude-pattern>
-	
+
 	<!-- How to scan -->
 	<arg value="sp"/> <!-- Show sniff and progress -->
 	<arg name="extensions" value="php"/> <!-- Limit to PHP files -->
@@ -44,22 +44,60 @@
 		<exclude name="WordPress.NamingConventions.ValidFunctionName" />
 		<exclude name="WordPress.Security.ValidatedSanitizedInput" />
 		<exclude name="WordPress.Security.EscapeOutput" />
-		<exclude name="WordPress.Security.NonceVerification" />		
+		<exclude name="WordPress.Security.NonceVerification" />
 		<exclude name="WordPress.WP.I18n" />
 		<exclude name="WordPress.DB" />
-		<exclude name="Squiz.PHP.DisallowMultipleAssignments.Found" />
-		<exclude name="Squiz.Commenting.FunctionComment" />
+	</rule>
+
+	<!-- TEMPORARY exclusion! -->
+	<rule ref="Squiz.PHP.CommentedOutCode">
 		<exclude name="Squiz.PHP.CommentedOutCode.Found" />
-		<exclude name="Squiz.PHP.EmbeddedPhp" />
-		<exclude name="Generic.PHP.NoSilencedErrors.Discouraged" />
+	</rule>
+
+	<!-- TEMPORARY exclusion! -->
+	<rule ref="Squiz.PHP.DisallowMultipleAssignments">
+		<exclude name="Squiz.PHP.DisallowMultipleAssignments.Found" />
+	</rule>
+
+	<!-- TEMPORARY exclusion! -->
+	<rule ref="Generic.Formatting.MultipleStatementAlignment">
 		<exclude name="Generic.Formatting.MultipleStatementAlignment.NotSameWarning" />
-		<exclude name="Generic.Commenting.DocComment" />
-		<exclude name="Generic.WhiteSpace.DisallowSpaceIndent.SpacesUsed" />
+	 	<properties>
+			   <property name="ignoreMultiLine" value="true" />
+		</properties>
+	</rule>
+
+	<!-- TEMPORARY exclusion! -->
+	<rule ref="Generic.ControlStructures.InlineControlStructure">
 		<exclude name="Generic.ControlStructures.InlineControlStructure.NotAllowed" />
+	</rule>
+
+	<!-- TEMPORARY exclusion! -->
+	<rule ref="Squiz.PHP.EmbeddedPhp">
+		<exclude name="Squiz.PHP.EmbeddedPhp.ContentAfterOpen" />
+		<exclude name="Squiz.PHP.EmbeddedPhp.ContentAfterEnd" />
+		<exclude name="Squiz.PHP.EmbeddedPhp.ContentBeforeOpen" />
+		<exclude name="Squiz.PHP.EmbeddedPhp.ContentBeforeEnd" />
+		<exclude name="Squiz.PHP.EmbeddedPhp.MultipleStatements" />
+	</rule>
+
+	<rule ref="Generic.PHP.NoSilencedErrors">
+		<!-- TEMPORARY exclusion! -->
+		<exclude name="Generic.PHP.NoSilencedErrors.Discouraged"/>
 	</rule>
 
 	<!-- For help in understanding these custom sniff properties:
 		https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Customizable-sniff-properties -->
+	<rule ref="WordPress-Docs">
+		<exclude name="Squiz.Commenting.FileComment.Missing" />
+		<exclude name="Squiz.Commenting.ClassComment.Missing" />
+		<exclude name="Squiz.Commenting.FunctionComment.Missing" />
+
+		<!-- TEMPORARY exclusion! -->
+		<exclude name="Generic.WhiteSpace.DisallowSpaceIndent.SpacesUsed" />
+		<exclude name="Squiz.Commenting.FileComment.WrongStyle" />
+	</rule>
+
 	<rule ref="WordPress.Files.FileName">
 		<properties>
 			<property name="strict_class_file_names" value="false"/>
