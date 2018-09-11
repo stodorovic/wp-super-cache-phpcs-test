@@ -31,7 +31,7 @@
 */
 
 if ( ! function_exists( 'wp_cache_phase2' ) ) {
-	require_once( dirname( __FILE__ ) . '/wp-cache-phase2.php');
+	require_once( dirname( __FILE__ ) . '/wp-cache-phase2.php' );
 }
 
 if ( ! defined( 'PHP_VERSION_ID' ) ) {
@@ -93,7 +93,7 @@ if ( ! isset( $cache_enabled, $super_cache_enabled, $wp_cache_mod_rewrite, $cach
 	@include $wp_cache_config_file_sample; // phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged
 }
 
-include(WPCACHEHOME . 'wp-cache-base.php');
+include( WPCACHEHOME . 'wp-cache-base.php' );
 if ( class_exists( 'WP_REST_Controller' ) ) {
 	include( dirname( __FILE__ ) . '/rest/load.php' );
 }
