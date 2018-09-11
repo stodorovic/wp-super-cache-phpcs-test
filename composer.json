@@ -18,6 +18,10 @@
 		"php": ">=5.2"
 	},
 	"require-dev": {
+		"squizlabs/php_codesniffer": "*",
+		"wp-coding-standards/wpcs": "^0.14",
+		"phpunit/phpunit": "6.*",
+		"wimg/php-compatibility": "^8.0"
 	},
 	"minimum-stability": "dev",
 	"prefer-stable": true,
@@ -26,11 +30,11 @@
 	"autoload-dev": {
 	},
 	"scripts": {
-		"check-cs": [
-			"\"vendor/bin/phpcs\""
+		"test": [
+			"phpunit"
 		],
-		"check-cs-errors": [
-			"\"vendor/bin/phpcs\" --error-severity=1 --warning-severity=6"
-		]
+		"phpcs": [
+			"phpcs -s -p"
+		],
 	}
 }
