@@ -2,13 +2,20 @@
 	"name": "Automattic/wp-super-cache",
 	"description": "A very fast caching engine for WordPress that produces static html files.",
 	"type": "wordpress-plugin",
+	"license": "GPL-2.0-or-later",
 	"keywords": [
 		"wp-super-cache",
 		"wp-cache",
 		"cache"
 	],
+        "support": {
+                "issues": "https://github.com/Automattic/wp-super-cache/issues",
+                "forum": "https://wordpress.org/support/plugin/wp-super-cache",
+                "wiki": "https://github.com/Automattic/wp-super-cache/wiki",
+                "source": "https://github.com/Automattic/wp-super-cache"
+        },
 	"require": {
-		"php": ">=5.4"		
+		"php": ">=5.2"
 	},
 	"require-dev": {
 	},
@@ -24,9 +31,6 @@
 		],
 		"check-cs-errors": [
 			"\"vendor/bin/phpcs\" --error-severity=1 --warning-severity=6"
-		],
-		"fix-cs": [
-			"\"vendor/bin/phpcbf\""
-		],
+		]
 	}
 }
