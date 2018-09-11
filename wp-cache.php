@@ -31,7 +31,7 @@
 */
 
 if ( ! function_exists( 'wp_cache_phase2' ) ) {
-	require_once( dirname( __FILE__ ) . '/wp-cache-phase2.php' );
+	require_once dirname( __FILE__ ) . '/wp-cache-phase2.php';
 }
 
 if ( ! defined( 'PHP_VERSION_ID' ) ) {
@@ -46,7 +46,7 @@ function wpsc_init() {
 
 	$wp_cache_config_file = WP_CONTENT_DIR . '/wp-cache-config.php';
 
-	if ( !defined( 'WPCACHEHOME' ) ) {
+	if ( ! defined( 'WPCACHEHOME' ) ) {
 		define( 'WPCACHEHOME', dirname( __FILE__ ) . '/' );
 		$wp_cache_config_file_sample = WPCACHEHOME . 'wp-cache-config-sample.php';
 		$wp_cache_file = WPCACHEHOME . 'advanced-cache.php';
@@ -88,7 +88,7 @@ global $wp_cache_config_file, $wp_cache_config_file_sample;
 if ( ! isset( $cache_enabled, $super_cache_enabled, $wp_cache_mod_rewrite, $cache_path ) &&
 	empty( $wp_cache_phase1_loaded ) &&
 	// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged
-	! @include( $wp_cache_config_file )
+	! @include $wp_cache_config_file
 ) {
 	@include $wp_cache_config_file_sample; // phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged
 }
