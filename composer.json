@@ -2,8 +2,13 @@
 	"name": "Automattic/wp-super-cache",
 	"description": "A very fast caching engine for WordPress that produces static html files.",
 	"type": "wordpress-plugin",
+	"keywords": [
+		"wp-super-cache",
+		"wp-cache",
+		"cache"
+	],
 	"require": {
-		"composer/installers": "~1.0",
+		"php": ">=5.4"		
 	},
 	"require-dev": {
 	},
