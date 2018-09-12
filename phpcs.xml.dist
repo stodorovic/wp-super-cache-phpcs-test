@@ -11,16 +11,12 @@
 		https://github.com/squizlabs/PHP_CodeSniffer/wiki/Advanced-Usage#ignoring-files-and-folders -->
 	<exclude-pattern>.git/*</exclude-pattern>
 	<exclude-pattern>tests/*</exclude-pattern>
+	<exclude-pattern>advanced-cache.php</exclude-pattern>
 	<exclude-pattern>wp-cache-config-sample.php</exclude-pattern>
 
 	<!-- How to scan -->
 	<arg value="sp"/> <!-- Show sniff and progress -->
 	<arg name="extensions" value="php"/> <!-- Limit to PHP files -->
-
-	<!-- Rules: Check PHP version compatibility - see
-		https://github.com/PHPCompatibility/PHPCompatibilityWP -->
-	<rule ref="PHPCompatibilityWP">
-	</rule>
 
 	<!-- For help in understanding this testVersion:
 		https://github.com/PHPCompatibility/PHPCompatibility#sniffing-your-code-for-compatibility-with-specific-php-versions -->
@@ -30,6 +26,11 @@
 		The minimum version set here should be in line with the minimum WP version
 		as set in the "Requires at least"  tag in the readme.txt file. -->
 	<config name="minimum_supported_wp_version" value="3.1"/>
+
+	<!-- Rules: Check PHP version compatibility - see
+		https://github.com/PHPCompatibility/PHPCompatibilityWP -->
+	<rule ref="PHPCompatibilityWP">
+	</rule>
 
 	<!-- Rules: WordPress Coding Standards - see
 		https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards -->
@@ -45,9 +46,15 @@
 		<exclude name="WordPress.Security.ValidatedSanitizedInput" />
 		<exclude name="WordPress.Security.EscapeOutput" />
 		<exclude name="WordPress.Security.NonceVerification" />
-		<exclude name="WordPress.WP.I18n" />
 		<exclude name="WordPress.DB" />
 	</rule>
+
+        <rule ref="WordPress.WP.I18n">
+		<exclude name="WordPress.WP.I18n.MissingTranslatorsComment" />
+                <properties>
+                        <property name="text_domain" value="wp-super-cache" />
+                </properties>
+        </rule
 
 	<!-- TEMPORARY exclusion! -->
 	<rule ref="Squiz.PHP.CommentedOutCode">
