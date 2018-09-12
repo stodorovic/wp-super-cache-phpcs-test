@@ -46,7 +46,7 @@ function wp_supercache_awaitingmoderation_admin() {
 				esc_html( $cache_awaitingmoderation ? __( 'enabled', 'wp-super-cache' ) : __( 'disabled', 'wp-super-cache' ) )
 			) . '</strong></p>';
 		}
-		echo '<div class="submit"><input class="button-primary" ' . SUBMITDISABLED . 'ntype="submit" value="' . esc_html__( 'Update', 'wp-super-cache' ) . '" /></div>';
+		echo '<div class="submit"><input class="button-primary" ' . SUBMITDISABLED . ' type="submit" value="' . esc_html__( 'Update', 'wp-super-cache' ) . '" /></div>';
 		wp_nonce_field( 'wp-cache' );
 		?>
 		</form>
