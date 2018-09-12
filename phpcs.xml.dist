@@ -20,12 +20,12 @@
 
 	<!-- For help in understanding this testVersion:
 		https://github.com/PHPCompatibility/PHPCompatibility#sniffing-your-code-for-compatibility-with-specific-php-versions -->
-	<config name="testVersion" value="5.2-"/>
+	<config name="testVersion" value="5.2-" />
 
 	<!-- Set the minimum supported WP version. This is used by several sniffs.
 		The minimum version set here should be in line with the minimum WP version
 		as set in the "Requires at least"  tag in the readme.txt file. -->
-	<config name="minimum_supported_wp_version" value="3.1"/>
+	<config name="minimum_supported_wp_version" value="3.1" />
 
 	<!-- Rules: Check PHP version compatibility - see
 		https://github.com/PHPCompatibility/PHPCompatibilityWP -->
@@ -54,7 +54,7 @@
                 <properties>
                         <property name="text_domain" value="wp-super-cache" />
                 </properties>
-        </rule
+        </rule>
 
 	<!-- TEMPORARY exclusion! -->
 	<rule ref="Squiz.PHP.CommentedOutCode">
