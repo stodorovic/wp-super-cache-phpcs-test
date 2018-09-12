@@ -70,12 +70,12 @@ function wp_supercache_badbehaviour_admin() {
 		<?php
 		if ( $changed ) {
 			echo '<p><strong>' . sprintf(
-					esc_html__( 'Bad Behavior support is now %s', 'wp-super-cache' ),
-					esc_html( $cache_badbehaviour ? __( 'enabled', 'wp-super-cache' ) : __( 'disabled', 'wp-super-cache' ) )
-				) . '</strong>&nbsp;' . sprintf(
-					__( '(Only WPCache caching supported, disabled compression and requires <a href="http://www.bad-behavior.ioerror.us/">Bad Behavior</a> in "%s/bad-behavior/") ', 'wp-super-cache' ),
-					esc_attr( WP_PLUGIN_DIR )
-				) . '</p>';
+				esc_html__( 'Bad Behavior support is now %s', 'wp-super-cache' ),
+				esc_html( $cache_badbehaviour ? __( 'enabled', 'wp-super-cache' ) : __( 'disabled', 'wp-super-cache' ) )
+			) . '</strong>&nbsp;' . sprintf(
+				__( '(Only WPCache caching supported, disabled compression and requires <a href="http://www.bad-behavior.ioerror.us/">Bad Behavior</a> in "%s/bad-behavior/") ', 'wp-super-cache' ),
+				esc_attr( WP_PLUGIN_DIR )
+			) . '</p>';
 		}
 		echo '<div class="submit"><input class="button-primary" ' . SUBMITDISABLED . ' type="submit" value="' . __( 'Update', 'wp-super-cache' ) . '" /></div>';
 		wp_nonce_field( 'wp-cache' );
