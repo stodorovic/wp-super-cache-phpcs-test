@@ -37,6 +37,7 @@
 	<rule ref="WordPress">
 		<exclude name="WordPress.WP.AlternativeFunctions" />
 		<exclude name="WordPress.Arrays" />
+		<exclude name="WordPress.PHP.NoSilencedErrors.Discouraged" />
 		<exclude name="WordPress.PHP.StrictComparisons.LooseComparison" />
 		<exclude name="WordPress.PHP.StrictInArray" />
 		<exclude name="WordPress.PHP.YodaConditions.NotYoda" />
