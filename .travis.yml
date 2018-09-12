@@ -7,6 +7,12 @@ dist: trusty
 # @link https://about.travis-ci.org/docs/user/languages/php/
 language: php
 
+# test only master, stable branches and pull requests
+branches:
+    only:
+        - master
+        - /^\d.\d+$/
+
 # Declare versions of PHP to use. Use one decimal max.
 # @link https://docs.travis-ci.com/user/build-configuration/
 matrix:

@@ -103,6 +103,7 @@
 		<!-- TEMPORARY exclusion! -->
 		<exclude name="Generic.WhiteSpace.DisallowSpaceIndent.SpacesUsed" />
 		<exclude name="Squiz.Commenting.FileComment.WrongStyle" />
+		<exclude name="Squiz.Commenting.FunctionComment.WrongStyle" />
 	</rule>
 
 	<rule ref="WordPress.Files.FileName">
