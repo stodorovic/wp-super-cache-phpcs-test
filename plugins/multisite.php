@@ -52,7 +52,7 @@ function wp_super_cache_blogs_field( $name, $blog_id ) {
 	$action_url   = add_query_arg( array(
 		'action' => $cache_option ? 'enable_cache' : 'disable_cache',
 		'id'     => $blog_id,
-	) );	                                                                                                                ) )
+	) );
 
 	printf(
 		'<a href="%s">%s</a>',
