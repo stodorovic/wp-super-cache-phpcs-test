@@ -20,42 +20,49 @@ function wp_supercache_badbehaviour_include() {
 
 function get_bb_file_loc() {
 	global $cache_badbehaviour_file;
-	if ( $cache_badbehaviour_file ) {
+
+	if ( ! empty( $cache_badbehaviour_file ) ) {
 		return $cache_badbehaviour_file;
 	}
 
-	if ( file_exists( WP_PLUGIN_DIR . '/bad-behavior/bad-behavior-generic.php' ) ) {
-		$bbfile = WP_PLUGIN_DIR . '/bad-behavior/bad-behavior-generic.php';
-	} elseif ( file_exists( WP_PLUGIN_DIR . '/Bad-Behavior/bad-behavior-generic.php' ) ) {
-		$bbfile = WP_PLUGIN_DIR . '/Bad-Behavior/bad-behavior-generic.php';
-	} else {
-		$bbfile = false;
-	}
-	return $bbfile;
-}
-
-function wp_supercache_badbehaviour_admin() {
-	global $cache_badbehaviour, $wp_cache_config_file, $valid_nonce;
-
-	$cache_badbehaviour = ( '' === $cache_badbehaviour || 'no' === $cache_badbehaviour ) ? 0 : (int) $cache_badbehaviour;
-
-	$changed = false;
-	$err_msg = '';
-	if ( isset( $_POST['cache_badbehaviour'] ) && $valid_nonce ) {
-		$bbfile = get_bb_file_loc();
-		if ( ! $bbfile ) {
-			$changed = false;
-			$err_msg = __( 'Bad Behaviour not found. Please check your install.', 'wp-super-cache' );
-		} elseif ( $cache_badbehaviour !== (int) $_POST['cache_badbehaviour'] ) {
-			$changed = true;
+	foreach ( array( 'bad-behavior/bad-behavior-generic.php', 'Bad-Behavior/bad-behavior-generic.php' ) as $bbfile ) {
+		if ( file_exists( WP_PLUGIN_DIR . '/' . $bbfile ) ) {
+			return $bbfile;
 		}
 	}
 
-	if ( $changed ) {
-		$cache_badbehaviour = (int) $_POST['cache_badbehaviour'];
-		wp_cache_replace_line( '^\s*\$cache_compression\s*=', '$cache_compression = 0;', $wp_cache_config_file );
-		wp_cache_replace_line( '^\s*\$cache_badbehaviour\s*=', "\$cache_badbehaviour = $cache_badbehaviour;", $wp_cache_config_file );
-		wp_cache_replace_line( '^\s*\$cache_badbehaviour_file\s*=', "\$cache_badbehaviour_file = '$bbfile';", $wp_cache_config_file );
+	return false;
+}
+
+function wp_supercache_badbehaviour_admin() {
+	global $cache_badbehaviour, $cache_badbehaviour_file, $wp_cache_config_file, $valid_nonce;
+
+	$requested_state    = isset( $_POST['cache_badbehaviour'] ) ? (int) $_POST['cache_badbehaviour'] : null;
+	$cache_badbehaviour = (int) $cache_badbehaviour;
+
+	$error_message           = '';
+	$cache_badbehaviour_file = '';
+	$current_bbfile          = get_bb_file_loc();
+	if ( ( $cache_badbehaviour || $requested_state ) && ! $current_bbfile ) {
+		$error_message = __( 'Bad Behaviour not found. Please check your install.', 'wp-super-cache' );
+	}
+
+	$changed = false;
+	if ( null !== $requested_state && $cache_badbehaviour !== $requested_state && $valid_nonce ) {
+		$cache_badbehaviour = $current_bbfile ? $requested_state : 0;
+
+		// Disable compression and remove rewrite rules if plugin is enabled.
+		if ( $cache_badbehaviour ) {
+			wp_cache_setting( 'cache_compression', 0 );
+			wp_cache_setting( 'wp_cache_mod_rewrite', 0 );
+			remove_mod_rewrite_rules();
+		}
+
+		// Update wp-cache-config.php.
+		wp_cache_replace_line( '^\s*\$cache_badbehaviour\s*=', '$cache_badbehaviour = ' . intval( $cache_badbehaviour ) . ';', $wp_cache_config_file );
+		wp_cache_replace_line( '^\s*\$cache_badbehaviour_file\s*=', "\$cache_badbehaviour_file = '$current_bbfile';", $wp_cache_config_file );
+		
+		$changed = true;
 	}
 
 	$id = 'badbehavior-section';
@@ -68,16 +75,23 @@ function wp_supercache_badbehaviour_admin() {
 		<label><input type="radio" name="cache_badbehaviour" value="1" <?php checked( $cache_badbehaviour ); ?>/> <?php esc_html_e( 'Enabled', 'wp-super-cache' ); ?></label>
 		<label><input type="radio" name="cache_badbehaviour" value="0" <?php checked( ! $cache_badbehaviour ); ?>/> <?php esc_html_e( 'Disabled', 'wp-super-cache' ); ?></label>
 		<?php
+		echo '<p>' . sprintf(
+			__( '(Only WPCache caching supported, disabled compression and requires <a href="http://www.bad-behavior.ioerror.us/">Bad Behavior</a> in "%s/plugins/bad-behavior/") ', 'wp-super-cache' ), 
+			esc_attr( WP_CONTENT_DIR )
+		) . '</p>';
+
 		if ( $changed ) {
 			echo '<p><strong>' . sprintf(
 				esc_html__( 'Bad Behavior support is now %s', 'wp-super-cache' ),
 				esc_html( $cache_badbehaviour ? __( 'enabled', 'wp-super-cache' ) : __( 'disabled', 'wp-super-cache' ) )
-			) . '</strong>&nbsp;' . sprintf(
-				__( '(Only WPCache caching supported, disabled compression and requires <a href="http://www.bad-behavior.ioerror.us/">Bad Behavior</a> in "%s/bad-behavior/") ', 'wp-super-cache' ),
-				esc_attr( WP_PLUGIN_DIR )
-			) . '</p>';
+			) . '</strong></p>';
 		}
-		echo '<div class="submit"><input class="button-primary" ' . SUBMITDISABLED . ' type="submit" value="' . __( 'Update', 'wp-super-cache' ) . '" /></div>';
+
+		if ( $error_message ) {
+			echo '<p><strong>' . esc_html__( 'Warning!', 'wp-super-cache' ) . '</strong>&nbsp;' . esc_html( $error_message ) . '</p>';
+		}
+
+		echo '<div class="submit"><input class="button-primary" ' . SUBMITDISABLED . ' type="submit" value="' . esc_html__( 'Update', 'wp-super-cache' ) . '" /></div>';
 		wp_nonce_field( 'wp-cache' );
 		?>
 		</form>
@@ -85,9 +99,6 @@ function wp_supercache_badbehaviour_admin() {
 	</fieldset>
 	<?php
 
-	if ( $err_msg ) {
-		echo '<p><strong>' . esc_html__( 'Warning!', 'wp-super-cache' ) . '</strong>&nbsp;' . esc_html( $err_msg ) . '</p>';
-	}
 }
 add_cacheaction( 'cache_admin_page', 'wp_supercache_badbehaviour_admin' );
 
