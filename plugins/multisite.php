@@ -50,13 +50,16 @@ function wp_super_cache_blogs_field( $name, $blog_id ) {
 
 	$cache_option = (int) get_blog_option( $blog_id, 'wp_super_cache_disabled' ) === 1;
 
-	printf( '<a href="%s">%s</a>', esc_url_raw(
-		wp_nonce_url( add_query_arg( array(
+	printf(
+		'<a href="%s">%s</a>',
+		esc_url_raw( wp_nonce_url(
+			add_query_arg( array(
 				'action' => $cache_option ? 'enable_cache' : 'disable_cache',
 				'id'     => $blog_id,
 			) ),
-			'wp-cache' . $blog_id )
-		), esc_html( $cache_option ? __( 'Enable', 'wp-super-cache' ) : __( 'Disable', 'wp-super-cache' ) ) );
+			'wp-cache' . $blog_id ) ),
+		esc_html( $cache_option ? __( 'Enable', 'wp-super-cache' ) : __( 'Disable', 'wp-super-cache' ) ) 
+	);
 }
 
 function wp_super_cache_multisite_notice() {
