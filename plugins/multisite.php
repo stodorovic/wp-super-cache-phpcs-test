@@ -49,6 +49,10 @@ function wp_super_cache_blogs_field( $name, $blog_id ) {
 	}
 
 	$cache_option = (int) get_blog_option( $blog_id, 'wp_super_cache_disabled' ) === 1;
+	$action_url   = add_query_arg( array(
+		'action' => $cache_option ? 'enable_cache' : 'disable_cache',
+		'id'     => $blog_id,
+	) );	                                                                                                                ) )
 
 	printf(
 		'<a href="%s">%s</a>',
