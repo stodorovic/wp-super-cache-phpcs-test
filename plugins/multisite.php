@@ -37,9 +37,9 @@ function wp_super_cache_blogs_field( $name, $blog_id ) {
 
 	$blog_id = (int) $blog_id;
 
-	if ( isset( $_GET['id'], $_GET['action'], $_GET['_wpnonce'] )
+	if ( isset( $_GET['id'], $_GET['action'], $_GET['_wpnonce'] ) // WPCS: input var ok.
 		&& filter_input( INPUT_GET, 'id', FILTER_VALIDATE_INT ) === $blog_id
-		&& wp_verify_nonce( $_GET['_wpnonce'], 'wp-cache' . $blog_id )
+		&& wp_verify_nonce( $_GET['_wpnonce'], 'wp-cache' . $blog_id ) // WPCS: sanitization ok.
 	) {
 		if ( filter_input( INPUT_GET, 'action' ) === 'disable_cache' ) {
 			add_blog_option( $blog_id, 'wp_super_cache_disabled', 1 );
@@ -54,10 +54,10 @@ function wp_super_cache_blogs_field( $name, $blog_id ) {
 		'id'     => $blog_id,
 	);
 
-	printf( 
+	printf(
 		'<a href="%s">%s</a>',
 		esc_url_raw( wp_nonce_url( add_query_arg( $action_args ), 'wp-cache' . $blog_id ) ),
-		esc_html( $cache_option ? __( 'Enable', 'wp-super-cache' ) : __( 'Disable', 'wp-super-cache' ) )
+		esc_html( $cache_option ? esc_attr__( 'Enable', 'wp-super-cache' ) : esc_attr__( 'Disable', 'wp-super-cache' ) )
 	);
 }
 

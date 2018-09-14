@@ -109,13 +109,12 @@ function scossdl_off_exclude_match( $match, $excludes ) {
  * Compute string modulo, based on SHA1 hash
  *
  * @param string $str
- * @param int    $mod
+ * @param int    $mod Divisor.
  *
  * @return int
  */
 function scossdl_string_mod( $str, $mod ) {
-	/* The full SHA1 is too large for PHP integer types. This should be
-	 * enough for our purpose */
+	// The full SHA1 is too large for PHP integer types. This should be enough for our purpose.
 	$num = hexdec( substr( sha1( $str ), 0, 5 ) );
 	return $num % $mod;
 }
