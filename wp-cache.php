@@ -400,16 +400,16 @@ function wp_cache_manager_error_checks() {
 		}
 	}
 
-	if ( ! $is_nginx && function_exists( "is_main_site" ) && true == is_main_site() ) {
+	if ( ! $is_nginx && function_exists( 'is_main_site' ) && true == is_main_site() ) {
 		if ( ! isset( $htaccess_path ) ) {
 			$home_path = trailingslashit( get_home_path() );
 		} else {
 			$home_path = $htaccess_path;
 		}
-		$scrules = implode( "\n", extract_from_markers( $home_path.'.htaccess', 'WPSuperCache' ) );
-		if ( $cache_enabled && $wp_cache_mod_rewrite && !$wp_cache_mobile_enabled && strpos( $scrules, addcslashes( str_replace( ', ', '|', $wp_cache_mobile_browsers ), ' ' ) ) ) {
-			echo '<div class="notice notice-warning"><h4>' . __( 'Mobile rewrite rules detected', 'wp-super-cache' ) . "</h4>";
-			echo "<p>" . __( 'For best performance you should enable "Mobile device support" or delete the mobile rewrite rules in your .htaccess. Look for the 2 lines with the text "2.0\ MMP|240x320" and delete those.', 'wp-super-cache' ) . "</p><p>" . __( 'This will have no affect on ordinary users but mobile users will see uncached pages.', 'wp-super-cache' ) . "</p></div>";
+		$scrules = implode( "\n", extract_from_markers( $home_path . '.htaccess', 'WPSuperCache' ) );
+		if ( $cache_enabled && $wp_cache_mod_rewrite && ! $wp_cache_mobile_enabled && strpos( $scrules, addcslashes( str_replace( ', ', '|', $wp_cache_mobile_browsers ), ' ' ) ) ) {
+			echo '<div class="notice notice-warning"><h4>' . esc_html__( 'Mobile rewrite rules detected', 'wp-super-cache' ) . '</h4>';
+			echo '<p>' . __( 'For best performance you should enable "Mobile device support" or delete the mobile rewrite rules in your .htaccess. Look for the 2 lines with the text "2.0\ MMP|240x320" and delete those.', 'wp-super-cache' ) . "</p><p>" . __( 'This will have no affect on ordinary users but mobile users will see uncached pages.', 'wp-super-cache' ) . '</p></div>';
 		} elseif ( $wp_cache_mod_rewrite && $cache_enabled && $wp_cache_mobile_enabled && $scrules != '' && (
 			( '' != $wp_cache_mobile_prefixes && false === strpos( $scrules, addcslashes( str_replace( ', ', '|', $wp_cache_mobile_prefixes ), ' ' ) ) ) ||
 			( '' != $wp_cache_mobile_browsers && false === strpos( $scrules, addcslashes( str_replace( ', ', '|', $wp_cache_mobile_browsers ), ' ' ) ) ) )
@@ -422,7 +422,7 @@ function wp_cache_manager_error_checks() {
 			<li> <?php _e( 'Scroll down the Advanced Settings page and click the <strong>Update Mod_Rewrite Rules</strong> button.', 'wp-super-cache' ); ?></li>
 			<li> <?php printf( __( 'Delete the plugin mod_rewrite rules in %s.htaccess enclosed by <code># BEGIN WPSuperCache</code> and <code># END WPSuperCache</code> and let the plugin regenerate them by reloading this page.', 'wp-super-cache' ), $home_path ); ?></li>
 			<li> <?php printf( __( 'Add the rules yourself. Edit %s.htaccess and find the block of code enclosed by the lines <code># BEGIN WPSuperCache</code> and <code># END WPSuperCache</code>. There are two sections that look very similar. Just below the line <code>%%{HTTP:Cookie} !^.*(comment_author_|%s|wp-postpass_).*$</code> add these lines: (do it twice, once for each section)', 'wp-super-cache' ), $home_path, wpsc_get_logged_in_cookie() ); ?></p>
-			<div style='padding: 2px; margin: 2px; border: 1px solid #333; width:400px; overflow: scroll'><pre><?php echo "RewriteCond %{HTTP_user_agent} !^.*(" . addcslashes( str_replace( ', ', '|', $wp_cache_mobile_browsers ), ' ' ) . ").*\nRewriteCond %{HTTP_user_agent} !^(" . addcslashes( str_replace( ', ', '|', $wp_cache_mobile_prefixes ), ' ' ) . ").*"; ?></pre></div></li></ol></div><?php
+			<div style='padding: 2px; margin: 2px; border: 1px solid #333; width:400px; overflow: scroll'><pre><?php echo 'RewriteCond %{HTTP_user_agent} !^.*(' . addcslashes( str_replace( ', ', '|', $wp_cache_mobile_browsers ), ' ' ) . ").*\nRewriteCond %{HTTP_user_agent} !^(" . addcslashes( str_replace( ', ', '|', $wp_cache_mobile_prefixes ), ' ' ) . ').*'; ?></pre></div></li></ol></div><?php
 		}
 
 		if ( $cache_enabled && $super_cache_enabled && $wp_cache_mod_rewrite && $scrules == '' ) {
@@ -435,20 +435,20 @@ function wp_cache_manager_error_checks() {
 	if ( ! $is_nginx && $wp_cache_mod_rewrite && $super_cache_enabled && function_exists( 'apache_get_modules' ) ) {
 		$mods = apache_get_modules();
 		$required_modules = array( 'mod_mime' => __( 'Required to serve compressed supercache files properly.', 'wp-super-cache' ), 'mod_headers' => __( 'Required to set caching information on supercache pages. IE7 users will see old pages without this module.', 'wp-super-cache' ), 'mod_expires' => __( 'Set the expiry date on supercached pages. Visitors may not see new pages when they refresh or leave comments without this module.', 'wp-super-cache' ) );
-		foreach( $required_modules as $req => $desc ) {
-			if( !in_array( $req, $mods ) ) {
+		foreach ( $required_modules as $req => $desc ) {
+			if ( ! in_array( $req, $mods ) ) {
 				$missing_mods[ $req ] = $desc;
 			}
 		}
-		if( isset( $missing_mods) && is_array( $missing_mods ) ) {
-			?><div class='notice notice-warning'><h4><?php _e( 'Missing Apache Modules', 'wp-super-cache' ); ?></h4>
-			<p><?php __( 'The following Apache modules are missing. The plugin will work in simple mode without them but in expert mode, your visitors may see corrupted pages or out of date content however.', 'wp-super-cache' ); ?></p><?php
-			echo "<ul>";
-			foreach( $missing_mods as $req => $desc ) {
+		if ( isset( $missing_mods) && is_array( $missing_mods ) ) {
+			?><div class='notice notice-warning'><h4><?php esc_html_e( 'Missing Apache Modules', 'wp-super-cache' ); ?></h4>
+			<p><?php esc_html_e( 'The following Apache modules are missing. The plugin will work in simple mode without them but in expert mode, your visitors may see corrupted pages or out of date content however.', 'wp-super-cache' ); ?></p><?php
+			echo '<ul>';
+			foreach ( $missing_mods as $req => $desc ) {
 				echo "<li> $req - $desc</li>";
 			}
-			echo "</ul>";
-			echo "</div>";
+			echo '</ul>';
+			echo '</div>';
 		}
 	}
 
@@ -966,22 +966,22 @@ table.wpsc-settings-table {
 				echo '<form name="cache_filler" action="' . esc_url_raw( add_query_arg( 'tab', 'preload', $admin_url ) ) . '" method="POST">';
 				echo '<input type="hidden" name="action" value="preload" />';
 				echo '<input type="hidden" name="page" value="wpsupercache" />';
-				echo '<p>' . sprintf( __( 'Refresh preloaded cache files every %s minutes. (0 to disable, minimum %d minutes.)', 'wp-super-cache' ), "<input type='text' size=4 name='wp_cache_preload_interval' value='" . (int) $wp_cache_preload_interval . "' />", $min_refresh_interval ) . '</p>';
+				echo '<p>' . sprintf( esc_html__( 'Refresh preloaded cache files every %s minutes. (0 to disable, minimum %d minutes.)', 'wp-super-cache' ), "<input type='text' size=4 name='wp_cache_preload_interval' value='" . (int) $wp_cache_preload_interval . "' />", $min_refresh_interval ) . '</p>';
 				if ( $count > 100 ) {
-					$step = (int)( $count / 10 );
+					$step = (int) ( $count / 10 );
 
 					$select = "<select name='wp_cache_preload_posts' size=1>";
 					$select .= "<option value='all' ";
-					if ( !isset( $wp_cache_preload_posts ) || $wp_cache_preload_posts == 'all' ) {
+					if ( ! isset( $wp_cache_preload_posts ) || $wp_cache_preload_posts == 'all' ) {
 						$checked = 'selectect=1 ';
-						$best = 'all';
+						$best    = 'all';
 					} else {
 						$checked = ' ';
-						$best = $wp_cache_preload_posts;
+						$best    = $wp_cache_preload_posts;
 					}
-					$select .= "{$checked}>" . __( 'all', 'wp-super-cache' ) . "</option>";
+					$select .= "{$checked}>" . esc_html__( 'all', 'wp-super-cache' ) . '</option>';
 
-					for( $c = $step; $c < $count; $c += $step ) {
+					for ( $c = $step; $c < $count; $c += $step ) {
 						$checked = ' ';
 						if ( $best == $c ) {
 							$checked = 'selected=1 ';
@@ -993,33 +993,32 @@ table.wpsc-settings-table {
 						$checked = 'selected=1 ';
 					}
 					$select .= "<option value='$count'{$checked}>$count</option>";
-					$select .= "</select>";
-					echo '<p>' . sprintf( __( 'Preload %s posts.', 'wp-super-cache' ), $select ) . '</p>';
+					$select .= '</select>';
+					echo '<p>' . sprintf( esc_html__( 'Preload %s posts.', 'wp-super-cache' ), $select ) . '</p>';
 				} else {
 					echo '<input type="hidden" name="wp_cache_preload_posts" value="' . $count . '" />';
 				}
 
-				echo '<input type="checkbox" name="wp_cache_preload_on" value="1" ';
-				echo $wp_cache_preload_on == 1 ? 'checked=1' : '';
-				echo ' /> ' . __( 'Preload mode (garbage collection disabled. Recommended.)', 'wp-super-cache' ) . '<br />';
-				echo '<input type="checkbox" name="wp_cache_preload_taxonomies" value="1" ';
-				echo $wp_cache_preload_taxonomies == 1 ? 'checked=1' : '';
-				echo ' /> ' . __( 'Preload tags, categories and other taxonomies.', 'wp-super-cache' ) . '<br />';
-				echo __( 'Send me status emails when files are refreshed.', 'wp-super-cache' ) . '<br />';
-				if ( !isset( $wp_cache_preload_email_volume ) ) {
+				echo '<input type="checkbox" name="wp_cache_preload_on" value="1" ' . checked( 1, $wp_cache_preload_on, false ) . ' />';
+				echo esc_html__( 'Preload mode (garbage collection disabled. Recommended.)', 'wp-super-cache' ) . '<br />';
+				echo '<input type="checkbox" name="wp_cache_preload_taxonomies" value="1" ' . checked( 1, $wp_cache_preload_taxonomies, false ) . ' />';
+				echo esc_html__( 'Preload tags, categories and other taxonomies.', 'wp-super-cache' ) . '<br />';
+				echo esc_html__( 'Send me status emails when files are refreshed.', 'wp-super-cache' ) . '<br />';
+
+				if ( ! isset( $wp_cache_preload_email_volume ) ) {
 					$wp_cache_preload_email_volume = 'none';
 				}
 				echo '<select type="select" name="wp_cache_preload_email_volume">';
-				echo '<option value="none" '. selected( 'none', $wp_cache_preload_email_volume ) . '>'.  __( 'No Emails', 'wp-super-cache' ) . '</option>';
-				echo '<option value="many" '. selected( 'many', $wp_cache_preload_email_volume ) . '>'.  __( 'Many emails, 2 emails per 100 posts.', 'wp-super-cache' ) . '</option>';
-				echo '<option value="medium" '. selected( 'medium', $wp_cache_preload_email_volume ) . '>'.  __( 'Medium, 1 email per 100 posts.', 'wp-super-cache' ) . '</option>';
-				echo '<option value="less" '. selected( 'less', $wp_cache_preload_email_volume ) . '>'.  __( 'Less emails, 1 at the start and 1 at the end of preloading all posts.', 'wp-super-cache' ) . '</option>';
+				echo '<option value="none" ' . selected( 'none', $wp_cache_preload_email_volume ) . '>'.  esc_attr__( 'No Emails', 'wp-super-cache' ) . '</option>';
+				echo '<option value="many" ' . selected( 'many', $wp_cache_preload_email_volume ) . '>'.  esc_attr__( 'Many emails, 2 emails per 100 posts.', 'wp-super-cache' ) . '</option>';
+				echo '<option value="medium" ' . selected( 'medium', $wp_cache_preload_email_volume ) . '>'.  esc_attr__( 'Medium, 1 email per 100 posts.', 'wp-super-cache' ) . '</option>';
+				echo '<option value="less" ' . selected( 'less', $wp_cache_preload_email_volume ) . '>'.  esc_attr__( 'Less emails, 1 at the start and 1 at the end of preloading all posts.', 'wp-super-cache' ) . '</option>';
 				echo '</select>';
 
 				if ( wp_next_scheduled( 'wp_cache_preload_hook' ) || wp_next_scheduled( 'wp_cache_full_preload_hook' ) ) {
 					$currently_preloading = true;
 				}
-				echo '<div class="submit"><input class="button-primary" type="submit" name="preload" value="' . __( 'Save Settings', 'wp-super-cache' ) . '" />';
+				echo '<div class="submit"><input class="button-primary" type="submit" name="preload" value="' . esc_attr__( 'Save Settings', 'wp-super-cache' ) . '" />';
 				echo '</div>';
 				wp_nonce_field( 'wp-cache' );
 				echo '</form>';
@@ -1055,10 +1054,10 @@ table.wpsc-settings-table {
 			?>
 		<table class="form-table">
 		<tr valign="top">
-			<th scope="row"><label for="wp_cache_enabled"><?php _e( 'Caching', 'wp-super-cache' ); ?></label></th>
+			<th scope="row"><label for="wp_cache_enabled"><?php esc_html_e( 'Caching', 'wp-super-cache' ); ?></label></th>
 			<td>
 				<fieldset>
-				<legend class="hidden"><?php _e( 'Caching', 'wp-super-cache' ); ?></legend>
+				<legend class="hidden"><?php esc_html_e( 'Caching', 'wp-super-cache' ); ?></legend>
 				<label><input type='checkbox' name='wp_cache_enabled' value='1' <?php if ( $cache_enabled == true ) { echo 'checked=checked'; } ?>> <?php _e( 'Enable Caching', 'wp-super-cache' ); ?><br />
 				</fieldset>
 			</td>
