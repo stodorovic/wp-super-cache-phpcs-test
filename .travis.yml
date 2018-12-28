@@ -58,8 +58,10 @@ before_script:
     - if [[ "$PHPCS" == "1" ]]; then git clone -b master --depth 1 https://github.com/PHPCompatibility/PHPCompatibility.git ${SNIFFS_DIR}/PHPCompatibility; fi
     # Install PHP Compatibility sniffs.
     - if [[ "$PHPCS" == "1" ]]; then git clone -b master --depth 1 https://github.com/PHPCompatibility/PHPCompatibilityWP ${SNIFFS_DIR}/PHPCompatibilityWP; fi
+    # Install PHP Compatibility sniffs.
+    - if [[ "$PHPCS" == "1" ]]; then git clone -b master --depth 1 https://github.com/PHPCompatibility/PHPCompatibilityParagonie ${SNIFFS_DIR}/PHPCompatibilityParagonie; fi
     # Set install path for PHPCS sniffs.
-    - if [[ "$PHPCS" == "1" ]]; then $PHPCS_DIR/bin/phpcs --config-set installed_paths ${SNIFFS_DIR}/wpcs,${SNIFFS_DIR}/PHPCompatibility,${SNIFFS_DIR}/PHPCompatibilityWP; fi
+    - if [[ "$PHPCS" == "1" ]]; then $PHPCS_DIR/bin/phpcs --config-set installed_paths ${SNIFFS_DIR}/wpcs,${SNIFFS_DIR}/PHPCompatibility,${SNIFFS_DIR}/PHPCompatibilityParagonie,${SNIFFS_DIR}/PHPCompatibilityWP; fi
     # After CodeSniffer install you should refresh your path.
     - if [[ "$PHPCS" == "1" ]]; then phpenv rehash; fi
 
