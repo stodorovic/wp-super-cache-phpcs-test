@@ -55,9 +55,9 @@ before_script:
     # Install WordPress Coding Standards.
     - if [[ "$PHPCS" == "1" ]]; then git clone -b master --depth 1 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards.git ${SNIFFS_DIR}/wpcs; fi
     # Install PHP Compatibility sniffs.
-    - if [[ "$PHPCS" == "1" ]]; then git clone -b master --depth 1 https://github.com/wimg/PHPCompatibility.git ${SNIFFS_DIR}/PHPCompatibility; fi
+    - if [[ "$PHPCS" == "1" ]]; then git clone -b 9.1.0 --depth 1 https://github.com/PHPCompatibility/PHPCompatibility.git ${SNIFFS_DIR}/PHPCompatibility; fi
     # Install PHP Compatibility sniffs.
-    - if [[ "$PHPCS" == "1" ]]; then git clone -b master --depth 1 https://github.com/PHPCompatibility/PHPCompatibilityWP ${SNIFFS_DIR}/PHPCompatibilityWP; fi
+    - if [[ "$PHPCS" == "1" ]]; then git clone -b 2.0.0 --depth 1 https://github.com/PHPCompatibility/PHPCompatibilityWP ${SNIFFS_DIR}/PHPCompatibilityWP; fi
     # Set install path for PHPCS sniffs.
     - if [[ "$PHPCS" == "1" ]]; then $PHPCS_DIR/bin/phpcs --config-set installed_paths ${SNIFFS_DIR}/wpcs,${SNIFFS_DIR}/PHPCompatibility,${SNIFFS_DIR}/PHPCompatibilityWP; fi
     # After CodeSniffer install you should refresh your path.
