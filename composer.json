@@ -8,6 +8,7 @@
 	},
 	"require-dev": {
 		"phpcompatibility/phpcompatibility-wp": "^2.0.0"
+		"WordPress-Coding-Standards/WordPress-Coding-Standards": "^1.2.*"
 	},
 	"minimum-stability": "dev",
 	"prefer-stable": true,
