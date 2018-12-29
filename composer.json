@@ -16,6 +16,9 @@
 	"autoload-dev": {
 	},
 	"scripts": {
+		"config-cs": [
+			"@php ./vendor/squizlabs/php_codesniffer/scripts/phpcs --config-set installed_paths ../../../vendor/wp-coding-standards/wpcs,../../../vendor/phpcompatibility/php-compatibility,../../../vendor/phpcompatibility/phpcompatibility-paragonie,../../../vendor/phpcompatibility/phpcompatibility-wp"
+		],
 		"check-cs": [
 			"@php ./vendor/squizlabs/php_codesniffer/scripts/phpcs"
 		],

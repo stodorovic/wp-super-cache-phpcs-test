@@ -45,8 +45,8 @@ install:
     - |
       if [[ "$PHPCS" == "1" ]]; then
         composer install --no-interaction
+        composer config-cs
       fi
-    - composer dump-autoload
 
 # Use this to prepare your build for testing.
 # e.g. copy database configurations, environment variables, etc.
@@ -55,22 +55,22 @@ before_script:
     # Speed up build time by disabling Xdebug.
     - phpenv config-rm xdebug.ini || echo 'No xdebug config.'
     # Set up temporary paths.
-    - export PHPCS_DIR=/tmp/phpcs
-    - export SNIFFS_DIR=/tmp/sniffs
+    #- export PHPCS_DIR=/tmp/phpcs
+    #- export SNIFFS_DIR=/tmp/sniffs
     # Install CodeSniffer for WordPress Coding Standards checks.
-    - if [[ "$PHPCS" == "1" ]]; then git clone -b master --depth 1 https://github.com/squizlabs/PHP_CodeSniffer.git $PHPCS_DIR; fi
+    #- if [[ "$PHPCS" == "1" ]]; then git clone -b master --depth 1 https://github.com/squizlabs/PHP_CodeSniffer.git $PHPCS_DIR; fi
     # Install WordPress Coding Standards.
-    - if [[ "$PHPCS" == "1" ]]; then git clone -b master --depth 1 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards.git ${SNIFFS_DIR}/wpcs; fi
+    #- if [[ "$PHPCS" == "1" ]]; then git clone -b master --depth 1 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards.git ${SNIFFS_DIR}/wpcs; fi
     # Install PHP Compatibility sniffs.
-    - if [[ "$PHPCS" == "1" ]]; then git clone -b master --depth 1 https://github.com/PHPCompatibility/PHPCompatibility.git ${SNIFFS_DIR}/PHPCompatibility; fi
+    #- if [[ "$PHPCS" == "1" ]]; then git clone -b master --depth 1 https://github.com/PHPCompatibility/PHPCompatibility.git ${SNIFFS_DIR}/PHPCompatibility; fi
     # Install PHP Compatibility sniffs.
-    - if [[ "$PHPCS" == "1" ]]; then git clone -b master --depth 1 https://github.com/PHPCompatibility/PHPCompatibilityWP ${SNIFFS_DIR}/PHPCompatibilityWP; fi
+    #- if [[ "$PHPCS" == "1" ]]; then git clone -b master --depth 1 https://github.com/PHPCompatibility/PHPCompatibilityWP ${SNIFFS_DIR}/PHPCompatibilityWP; fi
     # Install PHP Compatibility sniffs.
-    - if [[ "$PHPCS" == "1" ]]; then git clone -b master --depth 1 https://github.com/PHPCompatibility/PHPCompatibilityParagonie ${SNIFFS_DIR}/PHPCompatibilityParagonie; fi
+    #- if [[ "$PHPCS" == "1" ]]; then git clone -b master --depth 1 https://github.com/PHPCompatibility/PHPCompatibilityParagonie ${SNIFFS_DIR}/PHPCompatibilityParagonie; fi
     # Set install path for PHPCS sniffs.
-    - if [[ "$PHPCS" == "1" ]]; then $PHPCS_DIR/bin/phpcs --config-set installed_paths ${SNIFFS_DIR}/wpcs,${SNIFFS_DIR}/PHPCompatibility,${SNIFFS_DIR}/PHPCompatibilityParagonie,${SNIFFS_DIR}/PHPCompatibilityWP; fi
+    #- if [[ "$PHPCS" == "1" ]]; then $PHPCS_DIR/bin/phpcs --config-set installed_paths ${SNIFFS_DIR}/wpcs,${SNIFFS_DIR}/PHPCompatibility,${SNIFFS_DIR}/PHPCompatibilityParagonie,${SNIFFS_DIR}/PHPCompatibilityWP; fi
     # After CodeSniffer install you should refresh your path.
-    - if [[ "$PHPCS" == "1" ]]; then phpenv rehash; fi
+    #- if [[ "$PHPCS" == "1" ]]; then phpenv rehash; fi
 
 # Run test script commands.
 # Default is specific to project language.
@@ -83,7 +83,15 @@ script:
     # @link https://pear.php.net/package/PHP_CodeSniffer/
     # Uses a custom ruleset based on WordPress. This ruleset is automatically
     # picked up by PHPCS as it's named `phpcs.xml(.dist)`.
-    - if [[ "$PHPCS" == "1" ]]; then $PHPCS_DIR/bin/phpcs --runtime-set ignore_warnings_on_exit 1; fi
+    #- if [[ "$PHPCS" == "1" ]]; then $PHPCS_DIR/bin/phpcs --runtime-set ignore_warnings_on_exit 1; fi
+
+    # PHP CS
+    - |
+      if [[ "$PHPCS" == "1" ]]; then
+        travis_fold start "PHP.code-style" && travis_time_start
+        vendor/bin/phpcs -q --runtime-set ignore_warnings_on_exit 1
+        travis_time_finish && travis_fold end "PHP.code-style"
+      fi
 
 # Receive notifications for build results.
 # @link https://docs.travis-ci.com/user/notifications/#Email-notifications
