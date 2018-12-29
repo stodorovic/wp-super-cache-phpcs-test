@@ -409,7 +409,7 @@ function wp_cache_manager_error_checks() {
 		$scrules = implode( "\n", extract_from_markers( $home_path . '.htaccess', 'WPSuperCache' ) );
 		if ( $cache_enabled && $wp_cache_mod_rewrite && ! $wp_cache_mobile_enabled && strpos( $scrules, addcslashes( str_replace( ', ', '|', $wp_cache_mobile_browsers ), ' ' ) ) ) {
 			echo '<div class="notice notice-warning"><h4>' . esc_html__( 'Mobile rewrite rules detected', 'wp-super-cache' ) . '</h4>';
-			echo '<p>' . __( 'For best performance you should enable "Mobile device support" or delete the mobile rewrite rules in your .htaccess. Look for the 2 lines with the text "2.0\ MMP|240x320" and delete those.', 'wp-super-cache' ) . "</p><p>" . __( 'This will have no affect on ordinary users but mobile users will see uncached pages.', 'wp-super-cache' ) . '</p></div>';
+			echo '<p>' . esc_html__( 'For best performance you should enable "Mobile device support" or delete the mobile rewrite rules in your .htaccess. Look for the 2 lines with the text "2.0\ MMP|240x320" and delete those.', 'wp-super-cache' ) . '</p><p>' . esc_html__( 'This will have no affect on ordinary users but mobile users will see uncached pages.', 'wp-super-cache' ) . '</p></div>';
 		} elseif ( $wp_cache_mod_rewrite && $cache_enabled && $wp_cache_mobile_enabled && $scrules != '' && (
 			( '' != $wp_cache_mobile_prefixes && false === strpos( $scrules, addcslashes( str_replace( ', ', '|', $wp_cache_mobile_prefixes ), ' ' ) ) ) ||
 			( '' != $wp_cache_mobile_browsers && false === strpos( $scrules, addcslashes( str_replace( ', ', '|', $wp_cache_mobile_browsers ), ' ' ) ) ) )
@@ -440,7 +440,7 @@ function wp_cache_manager_error_checks() {
 				$missing_mods[ $req ] = $desc;
 			}
 		}
-		if ( isset( $missing_mods) && is_array( $missing_mods ) ) {
+		if ( isset( $missing_mods ) && is_array( $missing_mods ) ) {
 			?><div class='notice notice-warning'><h4><?php esc_html_e( 'Missing Apache Modules', 'wp-super-cache' ); ?></h4>
 			<p><?php esc_html_e( 'The following Apache modules are missing. The plugin will work in simple mode without them but in expert mode, your visitors may see corrupted pages or out of date content however.', 'wp-super-cache' ); ?></p><?php
 			echo '<ul>';
@@ -453,9 +453,9 @@ function wp_cache_manager_error_checks() {
 	}
 
 	if ( $valid_nonce && isset( $_POST[ 'action' ] ) && $_POST[ 'action' ] == 'dismiss_htaccess_warning' ) {
-		wp_cache_replace_line('^ *\$dismiss_htaccess_warning', "\$dismiss_htaccess_warning = 1;", $wp_cache_config_file);
+		wp_cache_replace_line( '^ *\$dismiss_htaccess_warning', "\$dismiss_htaccess_warning = 1;", $wp_cache_config_file );
 		$dismiss_htaccess_warning = 1;
-	} elseif ( !isset( $dismiss_htaccess_warning ) ) {
+	} elseif ( ! isset( $dismiss_htaccess_warning ) ) {
 		$dismiss_htaccess_warning = 0;
 	}
 	if ( isset( $disable_supercache_htaccess_warning ) == false )
