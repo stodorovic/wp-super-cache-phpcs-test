@@ -24,6 +24,6 @@
 		],
 		"fix-cs": [
 			"@php ./vendor/squizlabs/php_codesniffer/scripts/phpcbf"
-		],
+		]
 	}
 }
