@@ -1,59 +1,84 @@
+# Travis CI Configuration File
+
 sudo: false
 dist: trusty
 
+# Declare project language.
+# @link https://about.travis-ci.org/docs/user/languages/php/
 language: php
-php: 7.2
 
-notifications:
-  email:
-    on_success: never
-    on_failure: change
-
+# test only master, stable branches and pull requests
 branches:
-  only:
-    - master
+    only:
+        - master
+        - /^\d.\d+$/
 
-cache:
-  directories:
-    - $HOME/.composer/cache
+# Declare versions of PHP to use. Use one decimal max.
+# @link https://docs.travis-ci.com/user/build-configuration/
+matrix:
+    fast_finish: true
 
-env:
-  global:
-    - PATH="$TRAVIS_BUILD_DIR/vendor/bin:$PATH"
+    include:
+        # Current $required_php_version for WordPress: 5.2.4
+        # aliased to 5.2.17
+        - php: '5.2'
+          dist: precise
+        # aliased to a recent 5.6.x version
+        - php: '5.6'
+          env: PHPCS=1
 
-before_install:
-  - |
-    # Remove Xdebug for a huge performance increase:
-    if [ -f ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini ]; then
-      phpenv config-rm xdebug.ini
-    else
-      echo "xdebug.ini does not exist"
-    fi
-  - |
-    # Raise PHP memory limit to 512MB
-    echo 'memory_limit = 512M' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
-  - composer validate
+    allow_failures:
+        # Allow failures until we fix errors
+        - php: '5.6'
 
-install:
-  - composer install
-  - composer prepare-tests
+# Git clone depth
+# By default Travis CI clones repositories to a depth of 50 commits
+git:
+    depth: 1
 
+# Use this to prepare the system to install prerequisites or dependencies.
+# e.g. sudo apt-get update.
+# Failures in this section will result in build status 'errored'.
+# before_install:
+
+# Use this to prepare your build for testing.
+# e.g. copy database configurations, environment variables, etc.
+# Failures in this section will result in build status 'errored'.
+before_script:
+    # Speed up build time by disabling Xdebug.
+    - phpenv config-rm xdebug.ini || echo 'No xdebug config.'
+    # Set up temporary paths.
+    - export PHPCS_DIR=/tmp/phpcs
+    - export SNIFFS_DIR=/tmp/sniffs
+    # Install CodeSniffer for WordPress Coding Standards checks.
+    - if [[ "$PHPCS" == "1" ]]; then git clone -b master --depth 1 https://github.com/squizlabs/PHP_CodeSniffer.git $PHPCS_DIR; fi
+    # Install WordPress Coding Standards.
+    - if [[ "$PHPCS" == "1" ]]; then git clone -b master --depth 1 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards.git ${SNIFFS_DIR}/wpcs; fi
+    # Install PHP Compatibility sniffs.
+    - if [[ "$PHPCS" == "1" ]]; then git clone -b master --depth 1 https://github.com/PHPCompatibility/PHPCompatibility.git ${SNIFFS_DIR}/PHPCompatibility; fi
+    # Install PHP Compatibility sniffs.
+    - if [[ "$PHPCS" == "1" ]]; then git clone -b master --depth 1 https://github.com/PHPCompatibility/PHPCompatibilityWP ${SNIFFS_DIR}/PHPCompatibilityWP; fi
+    # Install PHP Compatibility sniffs.
+    - if [[ "$PHPCS" == "1" ]]; then git clone -b master --depth 1 https://github.com/PHPCompatibility/PHPCompatibilityParagonie ${SNIFFS_DIR}/PHPCompatibilityParagonie; fi
+    # Set install path for PHPCS sniffs.
+    - if [[ "$PHPCS" == "1" ]]; then $PHPCS_DIR/bin/phpcs --config-set installed_paths ${SNIFFS_DIR}/wpcs,${SNIFFS_DIR}/PHPCompatibility,${SNIFFS_DIR}/PHPCompatibilityParagonie,${SNIFFS_DIR}/PHPCompatibilityWP; fi
+    # After CodeSniffer install you should refresh your path.
+    - if [[ "$PHPCS" == "1" ]]; then phpenv rehash; fi
+
+# Run test script commands.
+# Default is specific to project language.
+# All commands must exit with code 0 on success. Anything else is considered failure.
 script:
-  - composer phpunit
+    # Search for PHP syntax errors.
+    - find -L . -name '*.php' -print0 | xargs -0 -n 1 -P 4 php -l
+    # WordPress Coding Standards.
+    # @link https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+    # @link https://pear.php.net/package/PHP_CodeSniffer/
+    # Uses a custom ruleset based on WordPress. This ruleset is automatically
+    # picked up by PHPCS as it's named `phpcs.xml(.dist)`.
+    - if [[ "$PHPCS" == "1" ]]; then $PHPCS_DIR/bin/phpcs --runtime-set ignore_warnings_on_exit 1; fi
 
-jobs:
-  include:
-    - stage: sniff
-      script:
-        - composer lint
-        - composer phpcs
-      env: BUILD=sniff
-    - stage: test
-      php: 7.2
-      env: WP_VERSION=latest
-    - stage: test
-      php: 5.4
-      env: WP_VERSION=latest
-    - stage: test
-      php: 5.4
-      env: WP_VERSION=3.1
+# Receive notifications for build results.
+# @link https://docs.travis-ci.com/user/notifications/#Email-notifications
+notifications:
+    email: false
