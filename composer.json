@@ -7,8 +7,9 @@
 		"composer/installers": "~1.0"
 	},
 	"require-dev": {
+		"dealerdirect/phpcodesniffer-composer-installer": "^0.5",
 		"phpcompatibility/phpcompatibility-wp": "^2.0.0",
-		"WordPress-Coding-Standards/WordPress-Coding-Standards": "^1.2.1"
+		"wp-coding-standards/wpcs": "1.*"
 	},
 	"minimum-stability": "dev",
 	"prefer-stable": true,
