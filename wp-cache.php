@@ -1146,7 +1146,7 @@ table.wpsc-settings-table {
 			<td>
 				<fieldset>
 					<legend class="hidden">Cache Location</legend>
-					<input type='text' size=80 name='wp_cache_location' value='<?php echo esc_attr( $cache_path ); ?>' />
+					<input type='text' size=80 name='wp_cache_location' value='<?php esc_attr_e( $cache_path ); ?>' />
 					<p><?php printf( esc_html__( 'Change the location of your cache files. The default is WP_CONTENT_DIR . /cache/ which translates to %s.', 'wp-super-cache' ), esc_attr( WP_CONTENT_DIR . '/cache/' ) ); ?></p>
 					<ol><li><?php esc_html_e( 'You must give the full path to the directory.', 'wp-super-cache' ); ?></li>
 						<li><?php esc_html_e( 'If the directory does not exist, it will be created. Please make sure your web server user has write access to the parent directory. The parent directory must exist.', 'wp-super-cache' ); ?></li>
@@ -1154,11 +1154,11 @@ table.wpsc-settings-table {
 						<li><?php esc_html_e( 'Submit a blank entry to set it to the default directory, WP_CONTENT_DIR . /cache/.', 'wp-super-cache' ); ?></li>
 						<?php
 						if ( get_site_option( 'wp_super_cache_index_detected' ) && strlen( $cache_path ) > strlen( ABSPATH ) && ABSPATH == substr( $cache_path, 0, strlen( ABSPATH ) ) ) {
-							$msg = __( 'The plugin detected a bare directory index in your cache directory, which would let visitors see your cache files directly and might expose private posts.', 'wp-super-cache' );
+							$msg = esc_html__( 'The plugin detected a bare directory index in your cache directory, which would let visitors see your cache files directly and might expose private posts.', 'wp-super-cache' );
 							if ( ! $is_nginx && $super_cache_enabled && $wp_cache_mod_rewrite == 1 ) {
 								$msg .= ' ' . __( 'You are using expert mode to serve cache files so the plugin has added <q>Options -Indexes</q> to the .htaccess file in the cache directory to disable indexes. However, if that does not work, you should contact your system administrator or support and ask for them to be disabled, or use simple mode and move the cache outside of the web root.', 'wp-super-cache' );
 							} else {
-								$msg .= ' <strong>' . sprintf( __( 'index.html files have been added in key directories, but unless directory indexes are disabled, it is probably better to store the cache files outside of the web root of %s', 'wp-super-cache' ), ABSPATH ) . '</strong>';
+								$msg .= ' <strong>' . sprintf( esc_html__( 'index.html files have been added in key directories, but unless directory indexes are disabled, it is probably better to store the cache files outside of the web root of %s', 'wp-super-cache' ), esc_attr( ABSPATH ) ) . '</strong>';
 							}
 							echo "<li>$msg</li>";
 						}
@@ -1429,7 +1429,8 @@ function wpsc_admin_tabs( $current = '' ) {
 	echo '<div id="nav"><h3 class="themes-php">';
 
 	foreach ( $admin_tabs as $tab => $name ) {
-		printf( '<a class="%s" href="%s">%s</a>',
+		printf(
+			'<a class="%s" href="%s">%s</a>',
 			esc_attr( $tab === $current ? 'nav-tab nav-tab-active' : 'nav-tab' ),
 			esc_url_raw( add_query_arg( 'tab', $tab, $admin_url ) ),
 			esc_html( $name )
@@ -1456,34 +1457,34 @@ function wsc_mod_rewrite() {
 
 	?>
 	<a name="modrewrite"></a><fieldset class="options">
-	<h4><?php _e( 'Mod Rewrite Rules', 'wp-super-cache' ); ?></h4>
+	<h4><?php esc_html_e( 'Mod Rewrite Rules', 'wp-super-cache' ); ?></h4>
 	<p><?php _e( 'When Expert cache delivery is enabled a file called <em>.htaccess</em> is modified. It should probably be in the same directory as your wp-config.php. This file has special rules that serve the cached files very quickly to visitors without ever executing PHP. The .htaccess file can be updated automatically, but if that fails, the rules will be displayed here and it can be edited by you. You will not need to update the rules unless a warning shows here.', 'wp-super-cache' ); ?></p>
 
 	<?php
 	extract( wpsc_get_htaccess_info() ); // $document_root, $apache_root, $home_path, $home_root, $home_root_lc, $inst_root, $wprules, $scrules, $condition_rules, $rules, $gziprules
 	$dohtaccess = true;
-	if( strpos( $wprules, 'wordpressuser' ) ) { // Need to clear out old mod_rewrite rules
-		echo "<p><strong>" . __( 'Thank you for upgrading.', 'wp-super-cache' ) . "</strong> " . sprintf( __( 'The mod_rewrite rules changed since you last installed this plugin. Unfortunately, you must remove the old supercache rules before the new ones are updated. Refresh this page when you have edited your .htaccess file. If you wish to manually upgrade, change the following line: %1$s so it looks like this: %2$s The only changes are "HTTP_COOKIE" becomes "HTTP:Cookie" and "wordpressuser" becomes "wordpress". This is a WordPress 2.5 change but it&#8217;s backwards compatible with older versions if you&#8217;re brave enough to use them.', 'wp-super-cache' ), '<blockquote><code>RewriteCond %{HTTP_COOKIE} !^.*wordpressuser.*$</code></blockquote>', '<blockquote><code>RewriteCond %{HTTP:Cookie} !^.*wordpress.*$</code></blockquote>' ) . "</p>";
-		echo "</fieldset></div>";
+	if ( strpos( $wprules, 'wordpressuser' ) ) { // Need to clear out old mod_rewrite rules
+		echo '<p><strong>' . esc_html__( 'Thank you for upgrading.', 'wp-super-cache' ) . '</strong> ' . sprintf( esc_html__( 'The mod_rewrite rules changed since you last installed this plugin. Unfortunately, you must remove the old supercache rules before the new ones are updated. Refresh this page when you have edited your .htaccess file. If you wish to manually upgrade, change the following line: %1$s so it looks like this: %2$s The only changes are "HTTP_COOKIE" becomes "HTTP:Cookie" and "wordpressuser" becomes "wordpress". This is a WordPress 2.5 change but it&#8217;s backwards compatible with older versions if you&#8217;re brave enough to use them.', 'wp-super-cache' ), '<blockquote><code>RewriteCond %{HTTP_COOKIE} !^.*wordpressuser.*$</code></blockquote>', '<blockquote><code>RewriteCond %{HTTP:Cookie} !^.*wordpress.*$</code></blockquote>' ) . '</p>';
+		echo '</fieldset></div>';
 		return;
 	}
-	if ( $dohtaccess && !isset( $_POST[ 'updatehtaccess' ] ) ){
+	if ( $dohtaccess && ! isset( $_POST['updatehtaccess'] ) ){
 		if ( $scrules == '' ) {
 			wpsc_update_htaccess_form( 0 ); // don't hide the update htaccess form
 		} else {
 			wpsc_update_htaccess_form();
 		}
-	} elseif ( $valid_nonce && isset( $_POST[ 'updatehtaccess' ] ) ) {
+	} elseif ( $valid_nonce && isset( $_POST['updatehtaccess'] ) ) {
 		if ( add_mod_rewrite_rules() ) {
-			echo "<h5>" . __( 'Mod Rewrite rules updated!', 'wp-super-cache' ) . "</h5>";
-			echo "<p><strong>" . sprintf( __( '%s.htaccess has been updated with the necessary mod_rewrite rules. Please verify they are correct. They should look like this:', 'wp-super-cache' ), $home_path ) . "</strong></p>\n";
+			echo '<h5>' . esc_html__( 'Mod Rewrite rules updated!', 'wp-super-cache' ) . '</h5>';
+			echo '<p><strong>' . sprintf( __( '%s.htaccess has been updated with the necessary mod_rewrite rules. Please verify they are correct. They should look like this:', 'wp-super-cache' ), $home_path ) . "</strong></p>\n";
 		} else {
 			global $update_mod_rewrite_rules_error;
-			echo "<h5>" . __( 'Mod Rewrite rules must be updated!', 'wp-super-cache' ) . "</h5>";
-			echo "<p>" . sprintf( __( 'The plugin could not update %1$s.htaccess file: %2$s.<br /> The new rules go above the regular WordPress rules as shown in the code below:', 'wp-super-cache' ), $home_path, "<strong>" . $update_mod_rewrite_rules_error . "</strong>" ) . "</p>\n";
+			echo '<h5>' . esc_html__( 'Mod Rewrite rules must be updated!', 'wp-super-cache' ) . '</h5>';
+			echo '<p>' . sprintf( __( 'The plugin could not update %1$s.htaccess file: %2$s.<br /> The new rules go above the regular WordPress rules as shown in the code below:', 'wp-super-cache' ), $home_path, '<strong>' . $update_mod_rewrite_rules_error . '</strong>' ) . "</p>\n";
 		}
 		echo "<div style='overflow: auto; width: 800px; height: 400px; padding:0 8px;color:#4f8a10;background-color:#dff2bf;border:1px solid #4f8a10;'>";
-		echo "<p><pre>" . esc_html( $rules ) . "</pre></p>\n</div>";
+		echo '<p><pre>' . esc_html( $rules ) . "</pre></p>\n</div>";
 	} else {
 		?>
 		<p><?php printf( __( 'WP Super Cache mod rewrite rules were detected in your %s.htaccess file.<br /> Click the following link to see the lines added to that file. If you have upgraded the plugin, make sure these rules match.', 'wp-super-cache' ), $home_path ); ?></p>
@@ -1491,14 +1492,20 @@ function wsc_mod_rewrite() {
 		if ( $rules != $scrules ) {
 			?><p style='padding:0 8px;color:#9f6000;background-color:#feefb3;border:1px solid #9f6000;'><?php _e( 'A difference between the rules in your .htaccess file and the plugin rewrite rules has been found. This could be simple whitespace differences, but you should compare the rules in the file with those below as soon as possible. Click the &#8217;Update Mod_Rewrite Rules&#8217; button to update the rules.', 'wp-super-cache' ); ?></p><?php
 		}
-		?><a href="javascript:toggleLayer('rewriterules');" class="button"><?php _e( 'View Mod_Rewrite Rules', 'wp-super-cache' ); ?></a><?php
+		?><a href="javascript:toggleLayer('rewriterules');" class="button"><?php esc_html_e( 'View Mod_Rewrite Rules', 'wp-super-cache' ); ?></a><?php
 		wpsc_update_htaccess_form();
 		echo "<div id='rewriterules' style='display: none;'>";
-		if ( $rules != $scrules )
-			echo '<div style="background: #fff; border: 1px solid #333; margin: 2px;">' . wp_text_diff( $scrules, $rules, array( 'title' => __( 'Rewrite Rules', 'wp-super-cache' ), 'title_left' => __( 'Current Rules', 'wp-super-cache' ), 'title_right' => __( 'New Rules', 'wp-super-cache' ) ) ) . "</div>";
+		if ( $rules != $scrules ) {
+			$wp_text_diff_args = array(
+				'title'       => esc_html__( 'Rewrite Rules', 'wp-super-cache' ),
+				'title_left'  => esc_html__( 'Current Rules', 'wp-super-cache' ),
+				'title_right' => esc_html__( 'New Rules', 'wp-super-cache' ),
+			);
+			echo '<div style="background: #fff; border: 1px solid #333; margin: 2px;">' . wp_text_diff( $scrules, $rules, $wp_text_diff_args ) . '</div>';
+		}
 		echo "<p><pre># BEGIN WPSuperCache\n" . esc_html( $rules ) . "# END WPSuperCache</pre></p>\n";
-		echo "<p>" . sprintf( __( 'Rules must be added to %s too:', 'wp-super-cache' ), WP_CONTENT_DIR . "/cache/.htaccess" ) . "</p>";
-		echo "<pre># BEGIN supercache\n" . esc_html( $gziprules ) . "# END supercache</pre></p>";
+		echo '<p>' . sprintf( esc_html__( 'Rules must be added to %s too:', 'wp-super-cache' ), esc_attr( WP_CONTENT_DIR . '/cache/.htaccess' ) ) . '</p>';
+		echo "<pre># BEGIN supercache\n" . esc_html( $gziprules ) . '# END supercache</pre></p>';
 		echo '</div>';
 	}
 
