@@ -960,8 +960,8 @@ table.wpsc-settings-table {
 			}
 			echo '<a name="preload"></a>';
 			if ( $super_cache_enabled == true && false == defined( 'DISABLESUPERCACHEPRELOADING' ) ) {
-				echo '<p>' . __( 'This will cache every published post and page on your site. It will create supercache static files so unknown visitors (including bots) will hit a cached page. This will probably help your Google ranking as they are using speed as a metric when judging websites now.', 'wp-super-cache' ) . '</p>';
-				echo '<p>' . __( 'Preloading creates lots of files however. Caching is done from the newest post to the oldest so please consider only caching the newest if you have lots (10,000+) of posts. This is especially important on shared hosting.', 'wp-super-cache' ) . '</p>';
+				echo '<p>' . esc_html__( 'This will cache every published post and page on your site. It will create supercache static files so unknown visitors (including bots) will hit a cached page. This will probably help your Google ranking as they are using speed as a metric when judging websites now.', 'wp-super-cache' ) . '</p>';
+				echo '<p>' . esc_html__( 'Preloading creates lots of files however. Caching is done from the newest post to the oldest so please consider only caching the newest if you have lots (10,000+) of posts. This is especially important on shared hosting.', 'wp-super-cache' ) . '</p>';
 				echo '<p>' . __( 'In &#8217;Preload Mode&#8217; regular garbage collection will be disabled so that old cache files are not deleted. This is a recommended setting when the cache is preloaded.', 'wp-super-cache' ) . '</p>';
 				echo '<form name="cache_filler" action="' . esc_url_raw( add_query_arg( 'tab', 'preload', $admin_url ) ) . '" method="POST">';
 				echo '<input type="hidden" name="action" value="preload" />';
@@ -1009,10 +1009,10 @@ table.wpsc-settings-table {
 					$wp_cache_preload_email_volume = 'none';
 				}
 				echo '<select type="select" name="wp_cache_preload_email_volume">';
-				echo '<option value="none" ' . selected( 'none', $wp_cache_preload_email_volume ) . '>'.  esc_attr__( 'No Emails', 'wp-super-cache' ) . '</option>';
-				echo '<option value="many" ' . selected( 'many', $wp_cache_preload_email_volume ) . '>'.  esc_attr__( 'Many emails, 2 emails per 100 posts.', 'wp-super-cache' ) . '</option>';
-				echo '<option value="medium" ' . selected( 'medium', $wp_cache_preload_email_volume ) . '>'.  esc_attr__( 'Medium, 1 email per 100 posts.', 'wp-super-cache' ) . '</option>';
-				echo '<option value="less" ' . selected( 'less', $wp_cache_preload_email_volume ) . '>'.  esc_attr__( 'Less emails, 1 at the start and 1 at the end of preloading all posts.', 'wp-super-cache' ) . '</option>';
+				echo '<option value="none" ' . selected( 'none', $wp_cache_preload_email_volume ) . '>' .  esc_attr__( 'No Emails', 'wp-super-cache' ) . '</option>';
+				echo '<option value="many" ' . selected( 'many', $wp_cache_preload_email_volume ) . '>' .  esc_attr__( 'Many emails, 2 emails per 100 posts.', 'wp-super-cache' ) . '</option>';
+				echo '<option value="medium" ' . selected( 'medium', $wp_cache_preload_email_volume ) . '>' .  esc_attr__( 'Medium, 1 email per 100 posts.', 'wp-super-cache' ) . '</option>';
+				echo '<option value="less" ' . selected( 'less', $wp_cache_preload_email_volume ) . '>' .  esc_attr__( 'Less emails, 1 at the start and 1 at the end of preloading all posts.', 'wp-super-cache' ) . '</option>';
 				echo '</select>';
 
 				if ( wp_next_scheduled( 'wp_cache_preload_hook' ) || wp_next_scheduled( 'wp_cache_full_preload_hook' ) ) {
@@ -1027,15 +1027,15 @@ table.wpsc-settings-table {
 				echo '<input type="hidden" name="page" value="wpsupercache" />';
 				echo '<div class="submit">';
 				if ( false == $currently_preloading ) {
-					echo '<input class="button-primary" type="submit" name="preload_now" value="' . __( 'Preload Cache Now', 'wp-super-cache' ) . '" />';
+					echo '<input class="button-primary" type="submit" name="preload_now" value="' . esc_attr__( 'Preload Cache Now', 'wp-super-cache' ) . '" />';
 				} else {
-					echo '<input class="button-primary" type="submit" name="preload_off" value="' . __( 'Cancel Cache Preload', 'wp-super-cache' ) . '" />';
+					echo '<input class="button-primary" type="submit" name="preload_off" value="' . esc_attr__( 'Cancel Cache Preload', 'wp-super-cache' ) . '" />';
 				}
 				echo '</div>';
 				wp_nonce_field( 'wp-cache' );
 				echo '</form>';
 			} else {
-				echo '<div class="notice notice-warning"><p>' . __( 'Preloading of cache disabled. Please make sure simple or expert mode is enabled or talk to your host administrator.', 'wp-super-cache' ) . '</p></div>';
+				echo '<div class="notice notice-warning"><p>' . esc_html__( 'Preloading of cache disabled. Please make sure simple or expert mode is enabled or talk to your host administrator.', 'wp-super-cache' ) . '</p></div>';
 			}
 			break;
 		case 'plugins':
