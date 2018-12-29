@@ -1066,7 +1066,7 @@ table.wpsc-settings-table {
 			<th scope="row"><label for="super_cache_enabled"><?php _e( 'Cache Delivery Method', 'wp-super-cache' ); ?></label></th>
 			<td>
 				<fieldset>
-				<label><input type='radio' name='wp_cache_mod_rewrite' <?php checked( $wp_cache_mod_rewrite, 0 ); ?> value='0'> <?php _e( '<acronym title="Use PHP to serve cached files">Simple</acronym>', 'wp-super-cache' ); echo ' <em>(' . esc_html__( 'Recommended', 'wp-super-cache' ) . ')</em>'; ?></label><br />
+				<label><input type='radio' name='wp_cache_mod_rewrite' <?php checked( $wp_cache_mod_rewrite, 0 ); ?> value='0'> <?php echo __( '<acronym title="Use PHP to serve cached files">Simple</acronym>', 'wp-super-cache' ) . ' <em>(' . esc_html__( 'Recommended', 'wp-super-cache' ) . ')</em>'; ?></label><br />
 				<label><input type='radio' name='wp_cache_mod_rewrite' <?php checked( $wp_cache_mod_rewrite, 1 ); ?> value='1'> <?php _e( '<acronym title="Use mod_rewrite to serve cached files">Expert</acronym>', 'wp-super-cache' ); ?></label><br />
 				<em><small class='description'><?php esc_html_e( 'Expert caching requires changes to important server files and may require manual intervention if enabled.', 'wp-super-cache' ); ?></small></em>
 				<?php if ( $is_nginx ) : ?>

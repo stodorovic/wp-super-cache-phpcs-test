@@ -41,6 +41,13 @@ git:
 # Failures in this section will result in build status 'errored'.
 # before_install:
 
+install:
+    - |
+      if [[ "$PHPCS" == "1" ]]; then
+        composer install --no-interaction
+      fi
+    - composer dump-autoload
+
 # Use this to prepare your build for testing.
 # e.g. copy database configurations, environment variables, etc.
 # Failures in this section will result in build status 'errored'.
