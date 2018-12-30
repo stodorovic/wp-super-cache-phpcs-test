@@ -21,7 +21,8 @@
 	"scripts": {
 		"config-cs": [
 			"\"vendor/bin/phpcs\" --config-set installed_paths ../../../vendor/wp-coding-standards/wpcs,../../../vendor/phpcompatibility/php-compatibility,../../../vendor/phpcompatibility/phpcompatibility-paragonie,../../../vendor/phpcompatibility/phpcompatibility-wp",
-			"pwd"
+			"ls -al ./vendor/squizlabs/php_codesniffer/scripts/",
+			"ls -al ./vendor/squizlabs/php_codesniffer/"
 		],
 		"check-cs": [
 			"@php ./vendor/squizlabs/php_codesniffer/scripts/phpcs"
