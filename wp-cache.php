@@ -268,12 +268,13 @@ function wp_cache_manager_error_checks() {
 			<?php
 		} elseif ( function_exists( 'wp_remote_get' ) == false ) {
 			$hostname = str_replace( 'http://', '', str_replace( 'https://', '', get_option( 'siteurl' ) ) );
-			if( strpos( $hostname, '/' ) ) {
+			if ( strpos( $hostname, '/' ) ) {
 				$hostname = substr( $hostname, 0, strpos( $hostname, '/' ) );
 			}
 			$ip = gethostbyname( $hostname );
 			if ( substr( $ip, 0, 3 ) == '127' || substr( $ip, 0, 7 ) == '192.168' ) {
-				?><div class="notice notice-warning">
+				?>
+				<div class="notice notice-warning">
 					<h4><?php printf( esc_html__( 'Warning! Your hostname "%s" resolves to %s', 'wp-super-cache' ), esc_attr( $hostname ), esc_attr( $ip ) ); ?></h4>
 					<p><?php printf( esc_html__( 'Your server thinks your hostname resolves to %s. Some services such as garbage collection by this plugin, and WordPress scheduled posts may not operate correctly.', 'wp-super-cache' ), esc_attr( $ip ) ); ?></p>
 					<p><?php printf( __( 'Please see entry 16 in the <a href="%s">Troubleshooting section</a> of the readme.txt', 'wp-super-cache' ), 'https://wordpress.org/plugins/wp-super-cache/faq/' ); ?></p>
@@ -285,9 +286,9 @@ function wp_cache_manager_error_checks() {
 			}
 		} else {
 			$cron_url = get_option( 'siteurl' ) . '/wp-cron.php?check=' . wp_hash( '187425' );
-			$req_args = array( 
+			$req_args = array(
 				'timeout'  => 0.01,
-				'blocking' => true
+				'blocking' => true,
 			);
 			$cron     = wp_remote_get( $cron_url, $req_args );
 			if ( is_array( $cron ) ) {
@@ -350,7 +351,7 @@ function wp_cache_manager_error_checks() {
 	}
 
 	if ( ! is_writeable_ACLSafe( $wp_cache_config_file ) ) {
-		if ( !defined( 'SUBMITDISABLED' ) ) {
+		if ( ! defined( 'SUBMITDISABLED' ) ) {
 			define( 'SUBMITDISABLED', 'disabled style="color: #aaa" ' );
 		}
 		?>
@@ -363,7 +364,7 @@ function wp_cache_manager_error_checks() {
 			<?php esc_html_e( 'Read-only:', 'wp-super-cache' ); ?> <code>chmod 644 <?php echo WP_CONTENT_DIR; ?>/wp-cache-config.php</code></p>
 		</div>
 		<?php
-	} elseif ( !defined( 'SUBMITDISABLED' ) ) {
+	} elseif ( ! defined( 'SUBMITDISABLED' ) ) {
 		define( 'SUBMITDISABLED', ' ' );
 	}
 
@@ -404,7 +405,7 @@ function wp_cache_manager_error_checks() {
 	} elseif ( ! isset( $dismiss_readable_warning ) ) {
 		$dismiss_readable_warning = 0;
 	}
-	if( $dismiss_readable_warning == 0 && is_writeable_ACLSafe( WP_CONTENT_DIR . '/' ) ) {
+	if ( $dismiss_readable_warning == 0 && is_writeable_ACLSafe( WP_CONTENT_DIR . '/' ) ) {
 		$wp_content_stat = stat(WP_CONTENT_DIR . '/');
 		$wp_content_mode = decoct( $wp_content_stat[ 'mode' ] & 0777 );
 		if( substr( $wp_content_mode, -2 ) == '77' ) {
