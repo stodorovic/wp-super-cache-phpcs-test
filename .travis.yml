@@ -46,7 +46,7 @@ before_install:
 install:
   - |
     if [[ "$PHPCS" == "1" ]]; then
-      composer install --dev --no-interaction --no-suggest
+      composer install --no-interaction --no-suggest
       composer config-cs
     fi
 
@@ -70,7 +70,7 @@ script:
     if [[ "$PHPCS" == "1" ]]; then
       travis_fold start "PHP.code-style"
       travis_time_start
-      vendor/bin/phpcs -q --runtime-set ignore_warnings_on_exit 1 || exit 1
+      vendor/bin/phpcs -q --runtime-set ignore_warnings_on_exit 1
       travis_time_finish
       travis_fold end "PHP.code-style"
       echo
