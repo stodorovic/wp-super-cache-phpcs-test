@@ -7,6 +7,7 @@
 		"composer/installers": "~1.0"
 	},
 	"require-dev": {
+		"squizlabs/php_codesniffer": "3.*",
 		"dealerdirect/phpcodesniffer-composer-installer": "^0.5",
 		"wp-coding-standards/wpcs": "1.*",
 		"roave/security-advisories": "dev-master",
@@ -19,18 +20,20 @@
 	"autoload-dev": {
 	},
 	"scripts": {
+		"phpcs": [
+			"@php ./vendor/squizlabs/php_codesniffer/bin/phpcs"
+		],
 		"config-cs": [
-			"@php ./vendor/squizlabs/php_codesniffer/bin/phpcs --config-set installed_paths ../../../vendor/wp-coding-standards/wpcs,../../../vendor/phpcompatibility/php-compatibility,../../../vendor/phpcompatibility/phpcompatibility-paragonie,../../../vendor/phpcompatibility/phpcompatibility-wp",
-			"ls -al ./vendor/squizlabs/php_codesniffer/bin/"
+			"@phpcs --config-set installed_paths ../../../vendor/wp-coding-standards/wpcs,../../../vendor/phpcompatibility/php-compatibility,../../../vendor/phpcompatibility/phpcompatibility-paragonie,../../../vendor/phpcompatibility/phpcompatibility-wp"
 		],
 		"check-cs": [
-			"@php ./vendor/squizlabs/php_codesniffer/scripts/phpcs"
+			"@phpcs"
 		],
 		"check-cs-errors": [
-			"@php ./vendor/squizlabs/php_codesniffer/scripts/phpcs --error-severity=1 --warning-severity=6"
+			"@phpcs --error-severity=1 --warning-severity=6"
 		],
 		"fix-cs": [
-			"@php ./vendor/squizlabs/php_codesniffer/scripts/phpcbf"
+			"@php ./vendor/squizlabs/php_codesniffer/bin/phpcbf"
 		]
 	}
 }
